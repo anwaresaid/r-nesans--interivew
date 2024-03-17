@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import Navbar from "./components/Navbar";
+import { getPosts } from "./services/apiService";
+import Card from "./components/Card";
 
 function App() {
+  const [postNumber, setPostNumber] = useState(5);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    console.log("posts", posts);
+    getPosts(postNumber).then((data) => setPosts(data));
+  }, [postNumber]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar setPosts={setPostNumber} />
+      <b>Toplam kullanici Sayisi:{postNumber}</b>
+      <div className="card-container">
+        {posts.map((post) => (
+          <Card item={post} />
+        ))}
+      </div>
     </div>
   );
 }
